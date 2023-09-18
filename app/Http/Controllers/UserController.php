@@ -32,11 +32,16 @@ class UserController extends Controller
             ]
         );
 
+        $existMail = User::where('email', $data['email'])->first();
+
+        if ($existMail) {
+            return response()->json(['email' => 'Postoji korisnik s tim emailom'], 400);
+        }
+
         $data['password'] = Hash::make($data['password']);
         $data['confirmPassword'] = Hash::make($data['confirmPassword']);
         $user = new User();
         $user->create($data);
         return response()->json(['message' => 'Registracija uspjesna.']);
-
     }
 }
