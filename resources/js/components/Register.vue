@@ -1,7 +1,7 @@
 <template>
     <div class="container mx-auto mt-20 flex justify-center">
         <form
-            class="border lg:w-2/4 shadow-2xl p-10"
+            class="border lg:w-2/4 max-sm:w-11/12 max-md:w-11/12 shadow-2xl p-10"
             @submit.prevent="registerUser()"
         >
             <div class="grid md:grid-cols-2 md:gap-6">
@@ -171,11 +171,10 @@
 
             <div
                 v-if="success"
-                x-data="{ open: true }"
-                x-show="open"
                 id="toast-success"
-                class="flex items-center mt-10 md:ms-20 lg:ms-10 xl:ms-36 2xl:ms-48 w-full max-w-xs p-4 mb-4 text-white bg-white rounded-lg shadow dark:white dark:bg-green-700"
+                class="flex items-center mt-10 md:ms-20 lg:ms-10 xl:ms-36 2xl:ms-48 w-full max-w-xs p-4 mb-4 text-white bg-white rounded-lg shadow dark:white dark:bg-green-700 "
                 role="alert"
+
             >
                 <div
                     class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-700 dark:bg-green-700"
@@ -193,13 +192,16 @@
                     </svg>
                     <span class="sr-only">Check icon</span>
                 </div>
-                <div class="ml-3 text-md">Registracija uspješna</div>
+                <div class="ml-3 text-md">
+                    {{ message }}
+
+                </div>
                 <button
                     type="button"
-                    @click="open = false"
                     class="ml-auto -mx-1.5 -my-1.5 bg-green-700 text-white hover:white rounded-lg focus:ring-2 focus:white p-1.5 hover:white inline-flex items-center justify-center h-8 w-8 dark:white dark:hover:text-white dark:bg-green-700 dark:hover:bg-green-900"
                     data-dismiss-target="#toast-success"
                     aria-label="Close"
+                    @click="closeSuccess()"
                 >
                     <span class="sr-only">Close</span>
                     <svg
@@ -241,6 +243,7 @@
                 </div>
                 <button
                     type="button"
+                    @click="closeAlert()"
                     class="ml-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:white dark:text-red-400 dark:hover:red-300"
                     data-dismiss-target="#alert-border-2"
                     aria-label="Close"
@@ -263,6 +266,7 @@
                     </svg>
                 </button>
             </div>
+            <p class="text-center mt-3">Imate račun? <span><a href="/login" class="underline text-blue-600">Prijavite se</a></span></p>
         </form>
     </div>
 </template>
@@ -297,17 +301,13 @@ export default {
             this.confirmPasswordIcon = !this.confirmPasswordIcon;
         },
 
-        fetchCsrfToken() {
-            axios
-                .get("/sanctum/csrf-cookie")
-                .then((response) => {
-                    this.csrfToken = response.data.csrf_token;
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
+        closeAlert() {
+            this.existMail = false;
         },
 
+        closeSuccess(){
+            this.success = false;
+        },
         registerUser() {
             const Data = {
                 firstName: this.form.firstName,
@@ -350,4 +350,5 @@ export default {
 .showPw {
     cursor: pointer;
 }
+
 </style>

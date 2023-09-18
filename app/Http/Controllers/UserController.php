@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -43,5 +44,42 @@ class UserController extends Controller
         $user = new User();
         $user->create($data);
         return response()->json(['message' => 'Registracija uspjesna.']);
+
+    }
+
+    public function loginUser(Request $request)
+    {
+        $data = $request->validate(
+            [
+                'email' => 'required',
+                'password' => 'required',
+
+            ],
+            [
+
+                'email.required' => 'Obavezno.',
+                'password.required' => 'Obavezno'
+            ]
+        );
+
+
+        if (Auth::attempt($data)) {
+            $user = Auth::user();
+            return response()->json(['poruka' => 'Uspješna prijava', 'user' => $user]);
+        } else {
+
+            return response()->json(['poruka' => 'Pogrešan email ili lozinka.']);
+        }
+    }
+
+    public function isLogged()
+    {
+
+        $user = Auth::user();
+        if ($user) {
+            return response()->json($user);
+        } else {
+            return response()->json(null);
+        }
     }
 }
