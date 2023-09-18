@@ -67,14 +67,14 @@ import { RouterLink } from "vue-router";
                     <input
                         type="text"
                         id="search-navbar"
-                        class="block w-full p-2 pl-10 text-sm text-white bg-blue-600 focus:ring-blue-900 focus:border-white-500 dark:bg-blue-600 dark:border-white dark:placeholder-white dark:text-white "
+                        class="block w-full p-2 pl-10 text-sm text-white bg-blue-600 focus:ring-blue-900 focus:border-white-500 dark:bg-blue-600 dark:border-white dark:placeholder-white dark:text-white"
                         placeholder="Search..."
                     />
                 </div>
                 <button
                     data-collapse-toggle="navbar-search"
                     type="button"
-                    class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-white rounded-lg md:hidden hover:bg-blue-500 focus:outline-none focus:ring-2   "
+                    class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-white rounded-lg md:hidden hover:bg-blue-500 focus:outline-none focus:ring-2"
                     aria-controls="navbar-search"
                     aria-expanded="false"
                 >
@@ -95,7 +95,51 @@ import { RouterLink } from "vue-router";
                         />
                     </svg>
                 </button>
+                <button
+                    v-if="isLoggedIn"
+                    id="dropdownDefaultButton"
+                    data-dropdown-toggle="dropdown"
+                    class="text-white ms-3 text-sm bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    type="button"
+                >
+                    {{ loggedInUser.firstName }}
+                    <svg
+                        class="w-2.5 h-2.5 ml-2.5"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 10 6"
+                    >
+                        <path
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="m1 1 4 4 4-4"
+                        />
+                    </svg>
+                </button>
+                <!-- Dropdown menu -->
+                <div
+                    id="dropdown"
+                    class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+                >
+                    <ul
+                        class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                        aria-labelledby="dropdownDefaultButton"
+                    >
+                        <li>
+                            <a
+                                @click="logout()"
+                                href="#"
+                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                >Odjava</a
+                            >
+                        </li>
+                    </ul>
+                </div>
                 <ul
+                    v-if="!isLoggedIn"
                     class="flex items-center md:justify-end max-sm:hidden max-md:hidden"
                 >
                     <li>
@@ -137,7 +181,7 @@ import { RouterLink } from "vue-router";
                     <input
                         type="text"
                         id="search-navbar"
-                        class="block w-full p-2 pl-10 text-sm text-white  focus:ring-blue-500  dark:bg-blue-600 dark:border-white dark:placeholder-white dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        class="block w-full p-2 pl-10 text-sm text-white focus:ring-blue-500 dark:bg-blue-600 dark:border-white dark:placeholder-white dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Search..."
                     />
                 </div>
@@ -146,12 +190,16 @@ import { RouterLink } from "vue-router";
                         <RouterLink class="text-white" to="/">Home</RouterLink>
                     </li>
                     <li class="max-md:text-center text-xl mt-3">
-                        <RouterLink class="text-white me-3 ms-5 lg:hidden md:hidden " to="/register"
+                        <RouterLink
+                            class="text-white me-3 ms-5 lg:hidden md:hidden"
+                            to="/register"
                             >Register</RouterLink
                         >
                     </li>
                     <li class="max-md:text-center text-xl mt-3">
-                        <RouterLink class="text-white me-3 ms-3 md:hidden lg:hidden" to="/login"
+                        <RouterLink
+                            class="text-white me-3 ms-3 md:hidden lg:hidden"
+                            to="/login"
                             >Login</RouterLink
                         >
                     </li>
@@ -162,5 +210,62 @@ import { RouterLink } from "vue-router";
 
     <RouterView />
 </template>
+
+<script>
+import { mapState } from "vuex";
+import axios from "axios";
+import { mapGetters } from "vuex";
+
+export default {
+    data() {
+        return {
+            isLoggedIn: false,
+        };
+    },
+
+    computed: {
+        ...mapState(["loginMessage"]),
+        ...mapGetters(["loggedInUser"]),
+        isLoggedIn() {
+            return this.loggedInUser !== null;
+        },
+    },
+    created() {
+        if (this.loginMessage) {
+            setTimeout(() => {
+                this.$store.commit("setLoginMessage", "");
+            }, 2000);
+        }
+    },
+    methods: {
+        checkLoginStatus() {
+            axios
+                .get("/isLogged")
+                .then((response) => {
+                    this.loggedInUser = response.data;
+
+                    this.isLoggedIn = true;
+                    console.log(this.isLoggedIn);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
+        logout() {
+            axios
+                .post("/logout")
+                .then((response) => {
+                    this.isLoggedIn = false;
+                    this.loggedInUser = null;
+                    this.$store.dispatch("logout");
+                    this.$router.push("/login");
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
+    },
+};
+</script>
 
 <style lang="scss" scoped></style>
