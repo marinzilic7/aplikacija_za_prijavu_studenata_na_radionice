@@ -123,7 +123,16 @@ import { RouterLink } from "vue-router";
                             >Home</RouterLink
                         >
                     </li>
-
+                    <li>
+                        <RouterLink class="nav-link text-light text-center fs-5" to="/radionice"
+                            >Radionice</RouterLink
+                        >
+                    </li>
+                    <li>
+                        <RouterLink class="nav-link text-light text-center fs-5" to="/kategorije"
+                            >Kategorije</RouterLink
+                        >
+                    </li>
                 </ul>
             </div>
         </div>
