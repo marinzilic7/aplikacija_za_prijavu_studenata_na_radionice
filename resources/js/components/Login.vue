@@ -1,133 +1,104 @@
 <template>
-    <div class="container mx-auto mt-20 flex justify-center">
-        <form
-            class="border lg:w-2/4 max-sm:w-11/12 max-md:w-11/12 max-lg:w-11/12 shadow-2xl p-10"
-            @submit.prevent="loginUser()"
-        >
-            <div class="grid md:grid-cols-2 md:gap-6"></div>
-            <div class="relative z-0 w-25 mb-6 group">
-                <input
-                    type="email"
-                    name="floating_email"
-                    id="floating_email"
-                    class="block py-2.5 px-0 w-full text-md text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                    placeholder=" "
-                    v-model="form.email"
-                />
-                <label
-                    for="floating_email"
-                    class="peer-focus:font-medium absolute text-md text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-                    >Email adresa</label
-                >
-            </div>
-            <div class="relative z-0 w-full mb-6 group">
-                <input
-                    :type="passwordIcon ? 'text' : 'password'"
-                    name="floating_password"
-                    id="floating_password"
-                    class="block py-2.5 px-0 w-full text-md text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                    placeholder=" "
-                    v-model="form.password"
-                />
-                <span @click="password()">
-                    <svg
-                        v-if="passwordIcon"
-                        class="w-6 h-6 text-gray-800 dark:text-black absolute right-3 top-2 showPw"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 20 14"
-                    >
-                        <path
-                            d="M10 0C4.612 0 0 5.336 0 7c0 1.742 3.546 7 10 7 6.454 0 10-5.258 10-7 0-1.664-4.612-7-10-7Zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"
-                        />
-                    </svg>
-                    <svg
-                        v-else
-                        class="w-6 h-6 text-gray-800 dark:text-black absolute right-3 top-2 showPw"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                    >
-                        <path
-                            d="m2 13.587 3.055-3.055A4.913 4.913 0 0 1 5 10a5.006 5.006 0 0 1 5-5c.178.008.356.026.532.054l1.744-1.744A8.973 8.973 0 0 0 10 3C4.612 3 0 8.336 0 10a6.49 6.49 0 0 0 2 3.587Z"
-                        />
-                        <path
-                            d="m12.7 8.714 6.007-6.007a1 1 0 1 0-1.414-1.414L11.286 7.3a2.98 2.98 0 0 0-.588-.21l-.035-.01a2.981 2.981 0 0 0-3.584 3.583c0 .012.008.022.01.033.05.204.12.401.211.59l-6.007 6.007a1 1 0 1 0 1.414 1.414L8.714 12.7c.189.091.386.162.59.211.011 0 .021.007.033.01a2.981 2.981 0 0 0 3.584-3.584c0-.012-.008-.023-.011-.035a3.05 3.05 0 0 0-.21-.588Z"
-                        />
-                        <path
-                            d="M17.821 6.593 14.964 9.45a4.952 4.952 0 0 1-5.514 5.514L7.665 16.75c.767.165 1.55.25 2.335.251 6.453 0 10-5.258 10-7 0-1.166-1.637-2.874-2.179-3.407Z"
-                        />
-                    </svg>
-                </span>
-                <label
-                    for="floating_password"
-                    class="peer-focus:font-medium absolute text-md text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-                    >Lozinka</label
-                >
-            </div>
-
-            <button
-                type="submit"
-                class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-md w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+    <div class="container d-flex justify-content-center mt-5">
+        <div class="col-lg-5">
+            <h3 class="text-center">Prijava</h3>
+            <form
+                @submit.prevent="loginUser()"
+                class="shadow-lg border p-4 mt-4"
             >
-                Prijavi se
-            </button>
-            <div
-                v-if="falseLogin"
-                id="alert-border-2"
-                class="flex items-center p-4 mb-4 mt-4 text-red-800 border-red-300 bg-red-50 dark:text-red-400 dark:white dark:border-red-800"
-                role="alert"
-            >
-                <svg
-                    class="flex-shrink-0 w-4 h-4"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                >
-                    <path
-                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+                <div class="form-floating mb-3">
+                    <input
+                        type="email"
+                        class="form-control"
+                        id="floatingInput"
+                        placeholder="name@example.com"
+                        v-model="form.email"
                     />
-                </svg>
-                <div class="ml-3 text-sm font-medium">
-                    <span>Pogrešan email ili lozinka!</span>
+                    <label for="floatingInput">Email adresa</label>
                 </div>
-                <button
-                    type="button"
-                    @click="closeInvalid()"
-                    class="ml-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:white dark:text-red-400 dark:hover:red-300"
-                    data-dismiss-target="#alert-border-2"
-                    aria-label="Close"
-                >
-                    <span class="sr-only">Dismiss</span>
-                    <svg
-                        class="w-3 h-3"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 14 14"
-                    >
-                        <path
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                        />
-                    </svg>
+                <p v-if="errors.email" class="text-danger">
+                    {{ errors.email[0] }}
+                </p>
+                <div class="form-floating mb-3 position-relative">
+                    <input
+                        :type="passwordIcon ? 'text' : 'password'"
+                        class="form-control"
+                        id="floatingInput"
+                        placeholder="name@example.com"
+                        v-model="form.password"
+                    />
+                    <label for="floatingInput">Vasa lozinka</label>
+                    <span @click="password()">
+                        <svg
+                            v-if="passwordIcon"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="currentColor"
+                            class="bi bi-eye position-absolute end-0 bottom-0 me-3 mb-3"
+                            viewBox="0 0 16 16"
+                        >
+                            <path
+                                d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"
+                            />
+                            <path
+                                d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"
+                            />
+                        </svg>
+
+                        <svg
+                            v-else
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="currentColor"
+                            class="bi bi-eye-slash position-absolute end-0 bottom-0 me-3 mb-3"
+                            viewBox="0 0 16 16"
+                        >
+                            <path
+                                d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z"
+                            />
+                            <path
+                                d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z"
+                            />
+                            <path
+                                d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12-.708.708z"
+                            />
+                        </svg>
+                    </span>
+                </div>
+                <p v-if="errors.password" class="text-danger">
+                    {{ errors.password[0] }}
+                </p>
+
+                <button type="submit" class="btn btn-primary w-100">
+                    Prijava
                 </button>
-            </div>
-            <p class="text-center mt-3">
-                Nemate račun?
-                <span
-                    ><a href="/register" class="underline text-blue-600"
-                        >Registrirajte se</a
-                    ></span
+
+                <p class="text-center mt-3">
+                    Nemate račun?
+                    <span
+                        ><a href="/register" class="underline text-blue-600"
+                            >Registriraj se</a
+                        ></span
+                    >
+                </p>
+                <div
+                    class="alert alert-danger alert-dismissible fade show"
+                    role="alert"
+                    v-if="falseLogin"
                 >
-            </p>
-        </form>
+                    Pogrešan email ili lozinka.
+                    <button
+                        @click="closeInvalid()"
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close"
+                    ></button>
+                </div>
+            </form>
+        </div>
     </div>
 </template>
 
@@ -143,8 +114,9 @@ export default {
                 password: "",
             },
             passwordIcon: false,
-            falseLogin:false,
-            poruka:'',
+            falseLogin: false,
+            poruka: "",
+            errors: {},
         };
     },
     methods: {
@@ -152,7 +124,7 @@ export default {
             this.passwordIcon = !this.passwordIcon;
         },
 
-        closeInvalid(){
+        closeInvalid() {
             this.falseLogin = false;
         },
         loginUser() {

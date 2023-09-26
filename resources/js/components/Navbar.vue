@@ -3,210 +3,131 @@ import { RouterLink } from "vue-router";
 </script>
 
 <template>
-    <nav class="bg-blue-600 border-gray-200 bg-blue-600">
-        <div
-            class="max-w-screen-full flex flex-wrap items-center justify-between mx-auto p-4"
-        >
-            <a href="https://flowbite.com/" class="flex items-center">
-                <img
-                    src="https://www.sum.ba/logo.png"
-                    class="h-8 mr-3"
-                    alt="Flowbite Logo"
-                />
-                <span
-                    class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
-                    >Radionica</span
-                >
-            </a>
-            <div class="flex md:order-2">
-                <button
-                    type="button"
-                    data-collapse-toggle="navbar-search"
-                    aria-controls="navbar-search"
-                    aria-expanded="false"
-                    class="md:hidden text-gray-500 text-white hover:bg-gray-100 dark:hover:bg-blue-500 focus:outline-none rounded-lg text-sm p-2.5 mr-1"
-                >
-                    <svg
-                        class="w-5 h-5"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 20 20"
-                    >
-                        <path
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                        />
-                    </svg>
-                    <span class="sr-only">Search</span>
-                </button>
-                <div class="relative hidden md:block">
-                    <div
-                        class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
-                    >
-                        <svg
-                            class="w-4 h-4 text-white"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 20 20"
-                        >
-                            <path
-                                stroke="currentColor"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                            />
-                        </svg>
-                        <span class="sr-only">Search icon</span>
-                    </div>
-                    <input
-                        type="text"
-                        id="search-navbar"
-                        class="block w-full p-2 pl-10 text-sm text-white bg-blue-600 focus:ring-blue-900 focus:border-white-500 dark:bg-blue-600 dark:border-white dark:placeholder-white dark:text-white"
-                        placeholder="Search..."
-                    />
-                </div>
-                <button
-                    data-collapse-toggle="navbar-search"
-                    type="button"
-                    class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-white rounded-lg md:hidden hover:bg-blue-500 focus:outline-none focus:ring-2"
-                    aria-controls="navbar-search"
-                    aria-expanded="false"
-                >
-                    <span class="sr-only">Open main menu</span>
-                    <svg
-                        class="w-5 h-5"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 17 14"
-                    >
-                        <path
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M1 1h15M1 7h15M1 13h15"
-                        />
-                    </svg>
-                </button>
-                <button
-                    v-if="isLoggedIn"
-                    id="dropdownDefaultButton"
-                    data-dropdown-toggle="dropdown"
-                    class="text-white ms-3 text-sm bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    type="button"
-                >
-                    {{ loggedInUser.firstName }}
-                    <svg
-                        class="w-2.5 h-2.5 ml-2.5"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 10 6"
-                    >
-                        <path
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="m1 1 4 4 4-4"
-                        />
-                    </svg>
-                </button>
-                <!-- Dropdown menu -->
-                <div
-                    id="dropdown"
-                    class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
-                >
-                    <ul
-                        class="py-2 text-sm text-gray-700 dark:text-gray-200"
-                        aria-labelledby="dropdownDefaultButton"
-                    >
-                        <li>
-                            <a
-                                @click="logout()"
-                                href="#"
-                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                >Odjava</a
-                            >
-                        </li>
-                    </ul>
-                </div>
-                <ul
-                    v-if="!isLoggedIn"
-                    class="flex items-center md:justify-end max-sm:hidden max-md:hidden"
-                >
-                    <li>
-                        <RouterLink class="text-white me-3 ms-5" to="/register"
-                            >Register</RouterLink
-                        >
-                    </li>
-                    <li>
-                        <RouterLink class="text-white me-3 ms-3" to="/login"
-                            >Login</RouterLink
-                        >
-                    </li>
-                </ul>
-            </div>
-            <div
-                class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
-                id="navbar-search"
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand text-light" href="#">Radionica</a>
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
             >
-                <div class="relative mt-3 md:hidden">
-                    <div
-                        class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
-                    >
-                        <svg
-                            class="w-4 h-4 text-white"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 20 20"
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li v-if="isLoggedIn">
+                        <a
+                            class="btn btn-primary"
+                            data-bs-toggle="offcanvas"
+                            href="#offcanvasExample"
+                            role="button"
+                            aria-controls="offcanvasExample"
                         >
-                            <path
-                                stroke="currentColor"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                            />
-                        </svg>
-                    </div>
-                    <input
-                        type="text"
-                        id="search-navbar"
-                        class="block w-full p-2 pl-10 text-sm text-white focus:ring-blue-500 dark:bg-blue-600 dark:border-white dark:placeholder-white dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Search..."
-                    />
-                </div>
-                <ul class="flex flex-col p-4 md:p-0 mt-4">
-                    <li class="max-md:text-center text-xl">
-                        <RouterLink class="text-white" to="/">Home</RouterLink>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="30"
+                                height="30"
+                                fill="currentColor"
+                                class="bi bi-list text-light"
+                                viewBox="0 0 16 16"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
+                                />
+                            </svg>
+                        </a>
                     </li>
-                    <li class="max-md:text-center text-xl mt-3">
-                        <RouterLink
-                            class="text-white me-3 ms-5 lg:hidden md:hidden"
-                            to="/register"
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item" v-if="!isLoggedIn">
+                        <RouterLink class="nav-link text-light" to="/register"
                             >Register</RouterLink
                         >
                     </li>
-                    <li class="max-md:text-center text-xl mt-3">
-                        <RouterLink
-                            class="text-white me-3 ms-3 md:hidden lg:hidden"
-                            to="/login"
+                    <li class="nav-item" v-if="!isLoggedIn">
+                        <RouterLink class="nav-link text-light" to="/login"
                             >Login</RouterLink
                         >
                     </li>
+
+                    <li class="nav-item dropdown" v-if="isLoggedIn">
+                        <a
+                            class="nav-link dropdown-toggle text-light"
+                            href="#"
+                            id="navbarDropdown"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                        >
+                            {{ loggedInUser.firstName }}
+                        </a>
+                        <ul
+                            class="dropdown-menu"
+                            aria-labelledby="navbarDropdown"
+                        >
+                            <li>
+                                <a
+                                    @click="logout()"
+                                    class="dropdown-item"
+                                    href="#"
+                                    >Logout</a
+                                >
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
+                <form class="d-flex" v-if="isLoggedIn">
+                    <input
+                        class="form-control me-2"
+                        type="search"
+                        placeholder="Search"
+                        aria-label="Search"
+                    />
+                    <button class="btn btn-outline-light" type="submit">
+                        Search
+                    </button>
+                </form>
             </div>
         </div>
     </nav>
+    <div
+        class="offcanvas offcanvas-start"
+        tabindex="-1"
+        id="offcanvasExample"
+        aria-labelledby="offcanvasExampleLabel"
+    >
+        <div class="offcanvas-header bg-primary">
+            <h5 class="offcanvas-title text-light" id="offcanvasExampleLabel">
+                Navigation
+            </h5>
+            <button
+                type="button"
+                class="btn-close text-reset"
+                data-bs-dismiss="offcanvas"
+                aria-label="Close"
+            ></button>
+        </div>
+        <div class="bg-primary">
+            <hr class="text-light">
+        </div>
+        <div class="offcanvas-body bg-primary">
+            <div>
+                <ul style="list-style-type: none;">
+                    <li>
+                        <RouterLink class="nav-link text-light text-center fs-5" to="/"
+                            >Home</RouterLink
+                        >
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
 
     <RouterView />
 </template>
