@@ -35,9 +35,71 @@
                 </p>
                 <hr />
                 <div>
-                    <button class="btn btn-sm btn-outline-primary w-100">
+                    <button
+                        type="button"
+                        class="btn btn-outline-primary w-100"
+                        data-bs-toggle="modal"
+                        :data-bs-target="'#exampleModal' + radionica.id"
+                    >
                         Prijavi se
                     </button>
+                    <div
+                        class="modal fade"
+                        :id="'exampleModal' + radionica.id"
+                        tabindex="-1"
+                        aria-labelledby="exampleModalLabel"
+                        aria-hidden="true"
+                    >
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5
+                                        class="modal-title"
+                                        id="exampleModalLabel"
+                                    >
+                                        Zelite se prijaviti na radionicu
+                                        {{ radionica.ime }}?
+                                    </h5>
+                                    <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close"
+                                    ></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form
+                                        @submit.prevent="
+                                            posaljiPrijavu(radionica)
+                                        "
+                                    >
+                                        <p class="mb-3">
+                                            Ime radionice: {{ radionica.ime }}
+                                        </p>
+                                        <p class="mb-3">
+                                            Opis radionice: {{ radionica.opis }}
+                                        </p>
+                                        <hr />
+                                        <button
+                                            type="submit"
+                                            class="btn btn-outline-primary w-100"
+                                        >
+                                            Potvrdi prijavu
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button
+                                        type="button"
+                                        class="btn btn-outline-secondary w-100"
+                                        data-bs-dismiss="modal"
+                                    >
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <hr />
                 <p class="text-muted">
@@ -60,6 +122,9 @@ export default {
         return {
             isLoggedIn: false,
             radionice: [],
+            prijava: {
+                workshop_id: "",
+            },
         };
     },
 
@@ -117,7 +182,6 @@ export default {
             const currentDate = new Date();
             const dateToFormat = new Date(created_at);
 
-
             const daysDifference = differenceInDays(currentDate, dateToFormat);
 
             if (daysDifference === 0) {
@@ -128,8 +192,30 @@ export default {
                 return `Prije ${daysDifference} dana`;
             }
         },
+
+        posaljiPrijavu(radionica) {
+            const Data = {
+                workshop_id: radionica.id,
+            };
+            axios.defaults.headers.common["X-CSRF-TOKEN"] = this.csrfToken;
+            axios
+                .post("/dodajPrijavu", Data)
+                .then((response) => {
+                    this.message = response.data.message;
+                    $("#exampleModal").modal("hide");
+                    this.success = true;
+                    this.prijava = {
+                        workshop_id: "",
+                    };
+                })
+                .catch((error) => {
+                    if (error.response && error.response.status === 422) {
+                        this.errors = error.response.data.errors;
+                    }
+                });
+        },
     },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

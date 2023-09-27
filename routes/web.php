@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorkshopController;
 use App\Models\Workshop;
@@ -23,6 +24,9 @@ Route::post('/dodajRadionicu',[WorkshopController::class,'dodajRadionicu']);
 Route::get('/getRadionicu',[WorkshopController::class,'getRadionicu']);
 Route::post('/deleteRadionicu/{id}',[WorkshopController::class,'deleteRadionicu']);
 Route::post('/urediRadionicu/{id}',[WorkshopController::class,'urediRadionicu']);
+
+
+Route::post('/dodajPrijavu',[MemberController::class,'dodajPrijavu']);
 
 Route::get('/{any}', function () {
     return view('welcome');
