@@ -2,16 +2,55 @@
     <div v-if="!isLoggedIn">
         <div class="container d-flex justify-content-center">
             <div>
-                <div class="alert alert-info mt-5">Prijavite se kako bi mogli da se prijavite u radionice</div>
+                <div class="alert alert-info mt-5">
+                    Prijavite se kako bi mogli da se prijavite u radionice
+                </div>
             </div>
         </div>
     </div>
-
-
+    <h2 class="text-center mt-5">Radionice</h2>
+    <div class="d-flex gap-4 flex-wrap ms-5 mt-5">
+        <div
+            class="card shadow-lg"
+            v-for="radionica in radionice"
+            style="width: 18rem"
+        >
+            <div class="card-body">
+                <h5 class="card-title">Ime radionice: {{ radionica.ime }}</h5>
+                <hr />
+                <h6 class="card-subtitle mb-2 text-muted">
+                    Dodao/la:
+                    {{
+                        radionica.user.firstName + " " + radionica.user.lastName
+                    }}
+                </h6>
+                <hr />
+                <h6 class="card-subtitle mb-2 text-muted">
+                    Kategorija:
+                    {{ radionica.category.ime }}
+                </h6>
+                <hr />
+                <p class="card-text">
+                    {{ radionica.opis }}
+                </p>
+                <hr />
+                <div>
+                    <button class="btn btn-sm btn-outline-primary w-100">
+                        Prijavi se
+                    </button>
+                </div>
+                <hr />
+                <p class="text-muted">
+                    Objavljeno: {{ formattedDate(radionica.created_at) }}
+                </p>
+            </div>
+        </div>
+    </div>
 </template>
 
-
 <script>
+import { format, differenceInDays } from "date-fns";
+import { hr } from "date-fns/locale";
 import { mapState } from "vuex";
 import axios from "axios";
 import { mapGetters } from "vuex";
@@ -20,6 +59,7 @@ export default {
     data() {
         return {
             isLoggedIn: false,
+            radionice: [],
         };
     },
 
@@ -36,6 +76,7 @@ export default {
                 this.$store.commit("setLoginMessage", "");
             }, 2000);
         }
+        this.getRadionicu();
     },
     methods: {
         checkLoginStatus() {
@@ -51,11 +92,44 @@ export default {
                     console.log(error);
                 });
         },
+        getRadionicu() {
+            axios
+                .get("/getRadionicu")
+                .then((response) => {
+                    this.radionice = response.data.radionica;
+                    this.brojRadionica = response.data.brojRadionica;
+                    if (this.brojRadionica == 0) {
+                        this.noRadionice = true;
+                    } else {
+                        this.noRadionice = false;
+                    }
+                })
+                .catch((error) => {
+                    if (error.response && error.response.status === 422) {
+                        this.errors = error.response.data.errors;
+                    }
+                })
+                .finally(() => {
+                    this.spinner = false;
+                });
+        },
+        formattedDate(created_at) {
+            const currentDate = new Date();
+            const dateToFormat = new Date(created_at);
 
+
+            const daysDifference = differenceInDays(currentDate, dateToFormat);
+
+            if (daysDifference === 0) {
+                return "Danas";
+            } else if (daysDifference === 1) {
+                return "Jučer";
+            } else {
+                return `Prije ${daysDifference} dana`;
+            }
+        },
     },
 };
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
