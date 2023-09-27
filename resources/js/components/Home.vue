@@ -65,6 +65,7 @@
                                         class="btn-close"
                                         data-bs-dismiss="modal"
                                         aria-label="Close"
+                                        @click="closeNoti()"
                                     ></button>
                                 </div>
                                 <div class="modal-body">
@@ -93,9 +94,24 @@
                                         type="button"
                                         class="btn btn-outline-secondary w-100"
                                         data-bs-dismiss="modal"
+                                        @click="closeNoti()"
                                     >
                                         Close
                                     </button>
+                                    <div
+                                        class="alert alert-warning w-100 alert-dismissible fade show"
+                                        role="alert"
+                                        v-if="prijavaExist"
+                                    >
+                                        Vec ste prijavljeni na ovu radionicu.
+                                        <button
+                                            @click="closeNoti()"
+                                            type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="alert"
+                                            aria-label="Close"
+                                        ></button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -125,6 +141,7 @@ export default {
             prijava: {
                 workshop_id: "",
             },
+            prijavaExist:false,
         };
     },
 
@@ -211,9 +228,17 @@ export default {
                 .catch((error) => {
                     if (error.response && error.response.status === 422) {
                         this.errors = error.response.data.errors;
+                    } else if (
+                        error.response &&
+                        error.response.status === 400
+                    ) {
+                        this.prijavaExist = true;
                     }
                 });
         },
+        closeNoti(){
+            this.prijavaExist = false;
+        }
     },
 };
 </script>

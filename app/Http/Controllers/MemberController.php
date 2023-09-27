@@ -27,11 +27,11 @@ class MemberController extends Controller
 
         $data['user_id'] = auth()->id();
 
-        $existWorkshop = Member::where('user_id', $data['user_id'])
+        $existUser = Member::where('user_id', $data['user_id'])
             ->where('workshop_id', $data['workshop_id'])
             ->first();
 
-        if ($existWorkshop) {
+        if ($existUser) {
             return response()->json(['workshop' => 'Prijavljeni ste vec na ovu radionicu!'], 400);
         }
 
