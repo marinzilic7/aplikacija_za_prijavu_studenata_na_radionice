@@ -34,4 +34,16 @@ class CategoryController extends Controller
         return response()->json(['message' => 'Kategorija dodana.']);
 
     }
+
+    public function getCategory(){
+        $category = Category::get();
+        $brojKategorija = Category::count();
+        return response()->json(['category' => $category, 'brojKategorija' => $brojKategorija]);
+    }
+
+    public function deleteCategory($id){
+        $category = Category::find($id);
+        $category->delete();
+        return response()->json(['message' => 'Kategorija je uspešno izbrisana']);
+    }
 }

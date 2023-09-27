@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WorkshopController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -13,6 +14,12 @@ Route::get('/isLogged',[UserController::class,'isLogged']);
 
 
 Route::post('/dodajKategoriju',[CategoryController::class,'dodajKategoriju']);
+Route::get('/getCategory',[CategoryController::class,'getCategory']);
+Route::post('/deleteCategory/{id}',[CategoryController::class,'deleteCategory']);
+
+
+Route::post('/dodajRadionicu',[WorkshopController::class,'dodajRadionicu']);
+Route::get('/getRadionicu',[WorkshopController::class,'getRadionicu']);
 
 Route::get('/{any}', function () {
     return view('welcome');
