@@ -55,7 +55,7 @@ import { RouterLink } from "vue-router";
                         >
                     </li>
 
-                    <li class="nav-item dropdown" v-if="isLoggedIn">
+                    <li class="nav-item dropdown me-5" v-if="isLoggedIn">
                         <a
                             class="nav-link dropdown-toggle text-light"
                             href="#"
@@ -67,6 +67,7 @@ import { RouterLink } from "vue-router";
                             {{ loggedInUser.firstName }}
                         </a>
                         <ul
+
                             class="dropdown-menu"
                             aria-labelledby="navbarDropdown"
                         >
@@ -81,17 +82,7 @@ import { RouterLink } from "vue-router";
                         </ul>
                     </li>
                 </ul>
-                <form class="d-flex" v-if="isLoggedIn">
-                    <input
-                        class="form-control me-2"
-                        type="search"
-                        placeholder="Search"
-                        aria-label="Search"
-                    />
-                    <button class="btn btn-outline-light" type="submit">
-                        Search
-                    </button>
-                </form>
+
             </div>
         </div>
     </nav>
@@ -198,4 +189,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+
+.dropdown-menu[data-bs-popper]{
+    right:-60%;
+}
+
+</style>
