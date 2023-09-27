@@ -40,8 +40,13 @@ class WorkshopController extends Controller
 
     }
     public function getRadionicu(){
-        $radionica = Workshop::get();
+        $radionica = Workshop::with('user','category')->get();
         $brojRadionica = Workshop::count();
         return response()->json(['radionica' => $radionica, 'brojRadionica' => $brojRadionica]);
+    }
+
+    public function deleteRadionicu($id){
+        $radionica = Workshop::find($id);
+        $radionica->delete();
     }
 }

@@ -20,6 +20,7 @@ Route::post('/deleteCategory/{id}',[CategoryController::class,'deleteCategory'])
 
 Route::post('/dodajRadionicu',[WorkshopController::class,'dodajRadionicu']);
 Route::get('/getRadionicu',[WorkshopController::class,'getRadionicu']);
+Route::post('/deleteRadionicu/{id}',[WorkshopController::class,'deleteRadionicu']);
 
 Route::get('/{any}', function () {
     return view('welcome');

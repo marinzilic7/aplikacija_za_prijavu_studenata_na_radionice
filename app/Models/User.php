@@ -11,5 +11,12 @@ class User extends Model implements Authenticatable
 {
     use AuthenticatableTrait;
     protected $fillable = ['firstName', 'lastName', 'email', 'password', 'confirmPassword'];
+
+
+    public function workshops()
+    {
+        return $this->hasMany(Workshop::class);
+    }
+
     use HasFactory;
 }

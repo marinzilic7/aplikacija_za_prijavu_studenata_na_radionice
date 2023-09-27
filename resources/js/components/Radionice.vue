@@ -74,11 +74,13 @@
                                     aria-label=".form-select-sm example"
                                     v-model="radionica.category_id"
                                 >
-                                    <option selected>
-                                        Odaberi kategoriju
+                                    <option selected>Odaberi kategoriju</option>
+                                    <option
+                                        v-for="category in categories"
+                                        :value="category.id"
+                                    >
+                                        {{ category.ime }}
                                     </option>
-                                    <option v-for="category in categories" :value="category.id">{{ category.ime }}</option>
-
                                 </select>
 
                                 <button
@@ -108,20 +110,38 @@
             <div v-if="noRadionice" class="text-center fs-3 text-danger mt-5">
                 Trenutno nema radionica.
             </div>
-            <ul class="list-group" v-else>
-                <li
-                    v-for="radionica in radionice"
-                    class="list-group-item d-flex justify-content-between align-items-center"
-                >
-                    {{ radionica.ime }}
-                    <button
-                        @click="deleteCategory(radionica.id)"
-                        class="btn btn-sm btn-outline-danger"
-                    >
-                        Izbrisi
-                    </button>
-                </li>
-            </ul>
+            <div class="mt-3" v-else>
+                <table class="table table-bordered shadow-lg">
+                    <thead>
+                        <tr>
+                            <th scope="col">Broj radionice</th>
+                            <th scope="col">Ime radionice</th>
+                            <th scope="col">Dodao/la</th>
+                            <th scope="col">Kategorija</th>
+                            <th scope="col">Izbrisi</th>
+                            <th scope="col">Uredi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="radionica in radionice">
+                            <th scope="row">{{ radionica.id }}</th>
+                            <td>{{ radionica.ime }}</td>
+                            <td>{{ radionica.user.firstName }}</td>
+                            <td>{{ radionica.category.ime }}</td>
+                            <td>
+                                <button @click="deleteRadionicu(radionica.id)" class="btn btn-sm btn-outline-danger">
+                                    Izbrisi
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-dark">
+                                    Uredi
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </template>
@@ -132,11 +152,11 @@ export default {
         return {
             radionica: {
                 ime: "",
-                opis:"",
-                category_id:null,
+                opis: "",
+                category_id: null,
             },
             categories: [],
-            radionice:[],
+            radionice: [],
             brojRadionica: null,
             noRadionice: false,
             spinner: true,
@@ -162,8 +182,8 @@ export default {
                     this.success = true;
                     this.radionica = {
                         ime: "",
-                        opis:"",
-                        category_id:"",
+                        opis: "",
+                        category_id: "",
                     };
                     this.errors = {};
                     this.getRadionicu();
@@ -190,8 +210,7 @@ export default {
                     if (error.response && error.response.status === 422) {
                         this.errors = error.response.data.errors;
                     }
-                })
-
+                });
         },
         getRadionicu() {
             axios
@@ -214,13 +233,13 @@ export default {
                     this.spinner = false;
                 });
         },
-        deleteCategory(id) {
+        deleteRadionicu(id) {
             axios.defaults.headers.common["X-CSRF-TOKEN"] = this.csrfToken;
             axios
-                .post(`/deleteCategory/${id}`)
+                .post(`/deleteRadionicu/${id}`)
                 .then((response) => {
                     this.message = response.data.message;
-                    this.getCategory();
+                    this.getRadionicu();
                 })
                 .catch((error) => {
                     if (error.response && error.response.status === 422) {
