@@ -51,7 +51,8 @@
                                         class="form-control"
                                         id="floatingInput"
                                         placeholder="name@example.com"
-                                        v-model="radionica.ime"
+                                        v-model="data.ime"
+                                        required
                                     />
                                     <label for="floatingInput"
                                         >Ime radionice</label
@@ -63,7 +64,8 @@
                                         placeholder="Leave a comment here"
                                         id="floatingTextarea2"
                                         style="height: 100px"
-                                        v-model="radionica.opis"
+                                        v-model="data.opis"
+                                        required
                                     ></textarea>
                                     <label for="floatingTextarea2"
                                         >Opis radionice</label
@@ -72,7 +74,8 @@
                                 <select
                                     class="form-select form-select-sm mb-3"
                                     aria-label=".form-select-sm example"
-                                    v-model="radionica.category_id"
+                                    v-model="data.category_id"
+                                    required
                                 >
                                     <option selected>Odaberi kategoriju</option>
                                     <option
@@ -116,6 +119,7 @@
                         <tr>
                             <th scope="col">Broj radionice</th>
                             <th scope="col">Ime radionice</th>
+                            <th scope="col">Opis radionice</th>
                             <th scope="col">Dodao/la</th>
                             <th scope="col">Kategorija</th>
                             <th scope="col">Izbrisi</th>
@@ -126,17 +130,109 @@
                         <tr v-for="radionica in radionice">
                             <th scope="row">{{ radionica.id }}</th>
                             <td>{{ radionica.ime }}</td>
+                            <td>{{ radionica.opis }}</td>
                             <td>{{ radionica.user.firstName }}</td>
                             <td>{{ radionica.category.ime }}</td>
                             <td>
-                                <button @click="deleteRadionicu(radionica.id)" class="btn btn-sm btn-outline-danger">
+                                <button
+                                    @click="deleteRadionicu(radionica.id)"
+                                    class="btn btn-sm btn-outline-danger"
+                                >
                                     Izbrisi
                                 </button>
                             </td>
                             <td>
-                                <button class="btn btn-sm btn-outline-dark">
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-dark"
+                                    data-bs-toggle="modal"
+                                    :data-bs-target="'#exampleModal' + radionica.id"
+                                    data-bs-whatever="@getbootstrap"
+                                    @click="updateRadionicu(radionica)"
+                                >
                                     Uredi
                                 </button>
+
+                                <div
+                                    class="modal fade"
+                                    :id="'exampleModal' + radionica.id"
+                                    tabindex="-1"
+                                    :aria-labelledby="
+                                        'exampleModalLabel' + radionica.id
+                                    "
+                                    aria-hidden="true"
+                                >
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5
+                                                    class="modal-title"
+                                                    :id="
+                                                        '#exampleModal' +
+                                                        radionica.id
+                                                    "
+                                                >
+                                                    Uredi radionicu
+                                                </h5>
+                                                <button
+                                                    type="button"
+                                                    class="btn-close"
+                                                    data-bs-dismiss="modal"
+                                                    aria-label="Close"
+                                                ></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form
+                                                    @submit.prevent="
+                                                        urediRadionicu(radionica.id)
+                                                    "
+                                                >
+
+                                                    <div class="mb-3">
+                                                        <label
+                                                            for="recipient-name"
+                                                            class="col-form-label"
+                                                            >Ime radionice:</label
+                                                        >
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            id="recipient-name"
+                                                            v-model="data.ime"
+                                                        />
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label
+                                                            for="message-text"
+                                                            class="col-form-label"
+                                                            >Opis radionice:</label
+                                                        >
+                                                        <textarea
+                                                            class="form-control"
+                                                            id="message-text"
+                                                            v-model="data.opis"
+                                                        ></textarea>
+                                                    </div>
+                                                    <button
+                                                        type="submit"
+                                                        class="btn btn-primary w-100"
+                                                    >
+                                                        Uredi
+                                                    </button>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button
+                                                    type="submit"
+                                                    class="btn btn-secondary w-100"
+                                                    data-bs-dismiss="modal"
+                                                >
+                                                    Close
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     </tbody>
@@ -150,7 +246,7 @@
 export default {
     data() {
         return {
-            radionica: {
+            data: {
                 ime: "",
                 opis: "",
                 category_id: null,
@@ -160,6 +256,7 @@ export default {
             brojRadionica: null,
             noRadionice: false,
             spinner: true,
+            radionicaId:null,
         };
     },
     created() {
@@ -169,9 +266,9 @@ export default {
     methods: {
         dodajRadionicu() {
             const Data = {
-                ime: this.radionica.ime,
-                opis: this.radionica.opis,
-                category_id: this.radionica.category_id,
+                ime: this.data.ime,
+                opis: this.data.opis,
+                category_id: this.data.category_id,
             };
             axios.defaults.headers.common["X-CSRF-TOKEN"] = this.csrfToken;
             axios
@@ -180,7 +277,7 @@ export default {
                     this.message = response.data.message;
                     $("#exampleModal").modal("hide");
                     this.success = true;
-                    this.radionica = {
+                    this.data = {
                         ime: "",
                         opis: "",
                         category_id: "",
@@ -246,6 +343,34 @@ export default {
                         this.errors = error.response.data.errors;
                     }
                 });
+        },
+
+        updateRadionicu(radionica) {
+            this.radionicaId = radionica.id;
+            this.data.ime = radionica.ime;
+            this.data.opis = radionica.opis;
+            $("#exampleModal" + radionica.id).modal("show");
+        },
+        urediRadionicu(id) {
+            axios.defaults.headers.common["X-CSRF-TOKEN"] = this.csrfToken;
+            axios
+                .post(`/urediRadionicu/${id}`, {
+                    ime: this.data.ime,
+                    opis: this.data.opis,
+                })
+                .then((response) => {
+                    this.poruka = response.data.poruka;
+
+                    const radionica = response.data.radionica;
+                    const index = this.radionice.findIndex(
+                        (radionica) => radionica.id === this.radionicaId
+                    );
+                    if (index !== -1) {
+                        this.radionice[index].ime = radionica.ime;
+                        this.radionice[index].opis = radionica.opis;
+                    }
+                });
+            $("#exampleModal" + this.radionicaId).modal("hide");
         },
     },
 };

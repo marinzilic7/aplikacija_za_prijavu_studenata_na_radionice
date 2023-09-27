@@ -52,6 +52,7 @@
                                         class="form-control"
                                         id="recipient-name"
                                         v-model="category.ime"
+                                        required
                                     />
                                 </div>
                                 <button

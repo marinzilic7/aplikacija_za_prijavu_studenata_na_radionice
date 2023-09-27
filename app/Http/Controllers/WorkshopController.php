@@ -49,4 +49,22 @@ class WorkshopController extends Controller
         $radionica = Workshop::find($id);
         $radionica->delete();
     }
+
+    public function urediRadionicu(Request $request, $id){
+
+        $radionica = Workshop::findOrFail($id);
+        $data = $request->validate([
+            'ime' => 'required|string',
+            'opis' => 'required|string',
+
+        ]);
+
+        $radionica->ime=$data['ime'];
+        $radionica->opis=$data['opis'];
+        $radionica->save();
+        return response()->json([
+            'poruka' => 'Radionica uspjesno uređena',
+            'radionica' => $radionica,
+        ]);
+    }
 }
