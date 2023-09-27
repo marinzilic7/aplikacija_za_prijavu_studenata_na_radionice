@@ -65,7 +65,7 @@
                                         class="btn-close"
                                         data-bs-dismiss="modal"
                                         aria-label="Close"
-                                        @click="closeNoti()"
+                                        @click="closeNoti(); closeSuccess()"
                                     ></button>
                                 </div>
                                 <div class="modal-body">
@@ -94,7 +94,7 @@
                                         type="button"
                                         class="btn btn-outline-secondary w-100"
                                         data-bs-dismiss="modal"
-                                        @click="closeNoti()"
+                                        @click="closeNoti(); closeSuccess()"
                                     >
                                         Close
                                     </button>
@@ -106,6 +106,20 @@
                                         Vec ste prijavljeni na ovu radionicu.
                                         <button
                                             @click="closeNoti()"
+                                            type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="alert"
+                                            aria-label="Close"
+                                        ></button>
+                                    </div>
+                                    <div
+                                        class="alert alert-info w-100 alert-dismissible fade show"
+                                        role="alert"
+                                        v-if="prijavljenKorisnik"
+                                    >
+                                        Uspjesna prijava.
+                                        <button
+                                            @click="closeSuccess()"
                                             type="button"
                                             class="btn-close"
                                             data-bs-dismiss="alert"
@@ -141,7 +155,8 @@ export default {
             prijava: {
                 workshop_id: "",
             },
-            prijavaExist:false,
+            prijavaExist: false,
+            prijavljenKorisnik:false,
         };
     },
 
@@ -220,7 +235,7 @@ export default {
                 .then((response) => {
                     this.message = response.data.message;
                     $("#exampleModal").modal("hide");
-                    this.success = true;
+                    this.prijavljenKorisnik = true;
                     this.prijava = {
                         workshop_id: "",
                     };
@@ -236,8 +251,11 @@ export default {
                     }
                 });
         },
-        closeNoti(){
+        closeNoti() {
             this.prijavaExist = false;
+        },
+        closeSuccess(){
+            this.prijavljenKorisnik = false;
         }
     },
 };
