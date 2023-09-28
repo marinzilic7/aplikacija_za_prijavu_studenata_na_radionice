@@ -8,5 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Member extends Model
 {
     protected $fillable = ['workshop_id', 'user_id',];
+
+    public function workshop()
+    {
+        return $this->belongsTo(Workshop::class,'workshop_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
+
     use HasFactory;
 }

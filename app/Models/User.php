@@ -18,5 +18,10 @@ class User extends Model implements Authenticatable
         return $this->hasMany(Workshop::class);
     }
 
+    public function members()
+    {
+        return $this->hasMany(Member::class);
+    }
+
     use HasFactory;
 }

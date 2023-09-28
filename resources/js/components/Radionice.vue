@@ -124,6 +124,7 @@
                             <th scope="col">Kategorija</th>
                             <th scope="col">Izbrisi</th>
                             <th scope="col">Uredi</th>
+                            <th scope="col">Pogledaj prijave</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -146,7 +147,9 @@
                                     type="button"
                                     class="btn btn-sm btn-outline-dark"
                                     data-bs-toggle="modal"
-                                    :data-bs-target="'#exampleModal' + radionica.id"
+                                    :data-bs-target="
+                                        '#exampleModal' + radionica.id
+                                    "
                                     data-bs-whatever="@getbootstrap"
                                     @click="updateRadionicu(radionica)"
                                 >
@@ -184,15 +187,17 @@
                                             <div class="modal-body">
                                                 <form
                                                     @submit.prevent="
-                                                        urediRadionicu(radionica.id)
+                                                        urediRadionicu(
+                                                            radionica.id
+                                                        )
                                                     "
                                                 >
-
                                                     <div class="mb-3">
                                                         <label
                                                             for="recipient-name"
                                                             class="col-form-label"
-                                                            >Ime radionice:</label
+                                                            >Ime
+                                                            radionice:</label
                                                         >
                                                         <input
                                                             type="text"
@@ -205,7 +210,8 @@
                                                         <label
                                                             for="message-text"
                                                             class="col-form-label"
-                                                            >Opis radionice:</label
+                                                            >Opis
+                                                            radionice:</label
                                                         >
                                                         <textarea
                                                             class="form-control"
@@ -225,6 +231,88 @@
                                                 <button
                                                     type="submit"
                                                     class="btn btn-secondary w-100"
+                                                    data-bs-dismiss="modal"
+                                                >
+                                                    Close
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-success"
+                                    data-bs-toggle="modal"
+                                    :data-bs-target="'#prijave' + radionica.id"
+                                    @click="pogledajPrijave(radionica.id)"
+                                >
+                                    Prijave
+                                </button>
+                                <div
+                                    class="modal fade"
+                                    :id="'prijave' + radionica.id"
+                                    tabindex="-1"
+                                    aria-labelledby="exampleModalLabel"
+                                    aria-hidden="true"
+                                >
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5
+                                                    class="modal-title"
+                                                    id="exampleModalLabel"
+                                                >
+                                                    Sve prijave za radionicu:
+                                                    {{ radionica.ime }}
+                                                </h5>
+                                                <button
+                                                    type="button"
+                                                    class="btn-close"
+                                                    data-bs-dismiss="modal"
+                                                    aria-label="Close"
+                                                ></button>
+                                            </div>
+                                            <div
+                                                class="d-flex justify-content-center"
+                                            >
+                                                <div
+                                                    v-if="loader"
+                                                    class="spinner-grow text-primary"
+                                                    role="status"
+                                                >
+                                                    <span
+                                                        class="visually-hidden"
+                                                        >Loading...</span
+                                                    >
+                                                </div>
+                                            </div>
+                                            <div v-if="!loader">
+                                                <div class="modal-body">
+                                                    <h5 v-if="noSudionik" class="text-danger">Trenutno nema prijavljenih korisnika</h5>
+                                                    <h5 v-if="!noSudionik">
+                                                        Prijavljeni korisnici
+                                                        su:
+                                                    </h5>
+                                                    <br />
+                                                    <ul>
+                                                        <li
+                                                            v-for="prijava in prijave"
+                                                        >
+                                                            {{
+                                                                prijava.user
+                                                                    .firstName + ' ' + prijava.user.lastName
+                                                            }}
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-secondary"
                                                     data-bs-dismiss="modal"
                                                 >
                                                     Close
@@ -256,7 +344,11 @@ export default {
             brojRadionica: null,
             noRadionice: false,
             spinner: true,
-            radionicaId:null,
+            radionicaId: null,
+            prijave: [],
+            loader:true,
+            brojSudionika:null,
+            noSudionik:false,
         };
     },
     created() {
@@ -371,6 +463,28 @@ export default {
                     }
                 });
             $("#exampleModal" + this.radionicaId).modal("hide");
+        },
+
+        pogledajPrijave(id) {
+            axios
+                .get(`/getPrijave/${id}`)
+                .then((response) => {
+                    this.prijave = response.data.clanovi;
+                    this.brojSudionika = response.data.brojSudionika;
+                    if (this.brojSudionika == 0){
+                        this.noSudionik = true;
+                    }else{
+                        this.noSudionik = false;
+                    }
+                })
+                .catch((error) => {
+                    if (error.response && error.response.status === 422) {
+                        this.errors = error.response.data.errors;
+                    }
+                })
+                .finally(() => {
+                    this.loader = false;
+                });
         },
     },
 };

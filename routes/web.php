@@ -27,6 +27,9 @@ Route::post('/urediRadionicu/{id}',[WorkshopController::class,'urediRadionicu'])
 
 
 Route::post('/dodajPrijavu',[MemberController::class,'dodajPrijavu']);
+Route::get('/getPrijave/{id}',[MemberController::class,'getPrijave']);
+
+
 
 Route::get('/{any}', function () {
     return view('welcome');

@@ -179,7 +179,7 @@
                     v-if="success"
                 >
                     Registracija uspješna.
-                    <span><a href="/login text-primary">Prijavite se</a></span>
+                    <span><a href="/login">Prijavite se</a></span>
                     <button
                         @click="closeSuccess()"
                         type="button"

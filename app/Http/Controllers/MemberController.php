@@ -40,4 +40,10 @@ class MemberController extends Controller
         $user->create($data);
         return response()->json(['message' => 'Uspjesna prijava.']);
     }
+
+    public function getPrijave($id){
+        $brojSudionika = Member::where('workshop_id', $id)->count();
+        $clanovi = Member::with('user', 'workshop')->where('workshop_id', $id)->get();
+        return response()->json(['clanovi' => $clanovi, 'brojSudionika' => $brojSudionika]);
+    }
 }

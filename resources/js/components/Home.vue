@@ -65,7 +65,10 @@
                                         class="btn-close"
                                         data-bs-dismiss="modal"
                                         aria-label="Close"
-                                        @click="closeNoti(); closeSuccess()"
+                                        @click="
+                                            closeNoti();
+                                            closeSuccess();
+                                        "
                                     ></button>
                                 </div>
                                 <div class="modal-body">
@@ -94,7 +97,10 @@
                                         type="button"
                                         class="btn btn-outline-secondary w-100"
                                         data-bs-dismiss="modal"
-                                        @click="closeNoti(); closeSuccess()"
+                                        @click="
+                                            closeNoti();
+                                            closeSuccess();
+                                        "
                                     >
                                         Close
                                     </button>
@@ -135,6 +141,10 @@
                 <p class="text-muted">
                     Objavljeno: {{ formattedDate(radionica.created_at) }}
                 </p>
+                <hr />
+                <button @click="deleteRadionicu(radionica.id)" class="btn w-100 btn-outline-danger">
+                    Izbrisi radionicu
+                </button>
             </div>
         </div>
     </div>
@@ -156,7 +166,7 @@ export default {
                 workshop_id: "",
             },
             prijavaExist: false,
-            prijavljenKorisnik:false,
+            prijavljenKorisnik: false,
         };
     },
 
@@ -254,9 +264,23 @@ export default {
         closeNoti() {
             this.prijavaExist = false;
         },
-        closeSuccess(){
+        closeSuccess() {
             this.prijavljenKorisnik = false;
-        }
+        },
+        deleteRadionicu(id) {
+            axios.defaults.headers.common["X-CSRF-TOKEN"] = this.csrfToken;
+            axios
+                .post(`/deleteRadionicu/${id}`)
+                .then((response) => {
+                    this.message = response.data.message;
+                    this.getRadionicu();
+                })
+                .catch((error) => {
+                    if (error.response && error.response.status === 422) {
+                        this.errors = error.response.data.errors;
+                    }
+                });
+        },
     },
 };
 </script>
