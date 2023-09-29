@@ -5,7 +5,7 @@ import { RouterLink } from "vue-router";
 <template>
     <nav class="navbar navbar-expand-lg navbar-light bg-primary">
         <div class="container-fluid">
-            <a class="navbar-brand text-light" href="#">Radionica</a>
+            <a class="navbar-brand text-light" href="/"><img class="rounded float-start" src="https://www.sum.ba/logo_small.png" alt="" style="width: 60px; height: 30px;"></a>
             <button
                 class="navbar-toggler"
                 type="button"
@@ -193,6 +193,7 @@ export default {
 
 .dropdown-menu[data-bs-popper]{
     right:-60%;
+    left:-80px;
 }
 
 </style>

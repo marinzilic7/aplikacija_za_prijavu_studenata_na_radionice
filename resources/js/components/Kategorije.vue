@@ -1,6 +1,10 @@
 <template>
     <div class="container d-flex justify-content-center">
-        <div v-if="spinner" class="spinner-grow text-primary position-absolute top-50" role="status">
+        <div
+            v-if="spinner"
+            class="spinner-grow text-primary position-absolute top-50"
+            role="status"
+        >
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
@@ -37,6 +41,7 @@
                                 class="btn-close"
                                 data-bs-dismiss="modal"
                                 aria-label="Close"
+                                @click="closeCategoryExist()"
                             ></button>
                         </div>
                         <div class="modal-body">
@@ -68,9 +73,24 @@
                                 type="button"
                                 class="btn btn-outline-secondary w-100"
                                 data-bs-dismiss="modal"
+                                @click="closeCategoryExist()"
                             >
                                 Zatvori
                             </button>
+                            <div
+                                class="alert alert-danger alert-dismissible fade show w-100"
+                                role="alert"
+                                v-if="existCategory"
+                            >
+                                Postoji kategorija sa tim imenom.
+                                <button
+                                    @click="closeCategoryExist()"
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="alert"
+                                    aria-label="Close"
+                                ></button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -110,7 +130,8 @@ export default {
             categories: [],
             brojKategorija: null,
             noCategory: false,
-            spinner:true,
+            spinner: true,
+            existCategory: false,
         };
     },
     created() {
@@ -137,6 +158,11 @@ export default {
                 .catch((error) => {
                     if (error.response && error.response.status === 422) {
                         this.errors = error.response.data.errors;
+                    } else if (
+                        error.response &&
+                        error.response.status === 400
+                    ) {
+                        this.existCategory = true;
                     }
                 });
         },
@@ -156,7 +182,8 @@ export default {
                     if (error.response && error.response.status === 422) {
                         this.errors = error.response.data.errors;
                     }
-                }).finally(() => {
+                })
+                .finally(() => {
                     this.spinner = false;
                 });
         },
@@ -173,6 +200,9 @@ export default {
                         this.errors = error.response.data.errors;
                     }
                 });
+        },
+        closeCategoryExist() {
+            this.existCategory = false;
         },
     },
 };

@@ -40,6 +40,7 @@
                         class="btn btn-outline-primary w-100"
                         data-bs-toggle="modal"
                         :data-bs-target="'#staticBackdrop' + radionica.id"
+                        :disabled="!isLoggedIn"
                     >
                         Prijavi se
                     </button>
@@ -147,6 +148,7 @@
                 <button
                     @click="deleteRadionicu(radionica.id)"
                     class="btn w-100 btn-outline-danger"
+                    :disabled="!isLoggedIn"
                 >
                     Izbrisi radionicu
                 </button>

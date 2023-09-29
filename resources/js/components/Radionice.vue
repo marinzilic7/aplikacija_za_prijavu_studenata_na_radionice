@@ -41,6 +41,7 @@
                                 class="btn-close"
                                 data-bs-dismiss="modal"
                                 aria-label="Close"
+                                @click="closeRadionicaExist()"
                             ></button>
                         </div>
                         <div class="modal-body">
@@ -99,9 +100,24 @@
                                 type="button"
                                 class="btn btn-outline-secondary w-100"
                                 data-bs-dismiss="modal"
+                                @click="closeRadionicaExist()"
                             >
                                 Zatvori
                             </button>
+                            <div
+                                class="alert alert-danger alert-dismissible fade show w-100"
+                                role="alert"
+                                v-if="existRadionica"
+                            >
+                                Postoji radionica sa istim imenom za tu kategoriju.
+                                <button
+                                    @click="closeRadionicaExist()"
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="alert"
+                                    aria-label="Close"
+                                ></button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -290,7 +306,13 @@
                                             </div>
                                             <div v-if="!loader">
                                                 <div class="modal-body">
-                                                    <h5 v-if="noSudionik" class="text-danger">Trenutno nema prijavljenih korisnika</h5>
+                                                    <h5
+                                                        v-if="noSudionik"
+                                                        class="text-danger"
+                                                    >
+                                                        Trenutno nema
+                                                        prijavljenih korisnika
+                                                    </h5>
                                                     <h5 v-if="!noSudionik">
                                                         Prijavljeni korisnici
                                                         su:
@@ -302,7 +324,10 @@
                                                         >
                                                             {{
                                                                 prijava.user
-                                                                    .firstName + ' ' + prijava.user.lastName
+                                                                    .firstName +
+                                                                " " +
+                                                                prijava.user
+                                                                    .lastName
                                                             }}
                                                         </li>
                                                     </ul>
@@ -346,9 +371,10 @@ export default {
             spinner: true,
             radionicaId: null,
             prijave: [],
-            loader:true,
-            brojSudionika:null,
-            noSudionik:false,
+            loader: true,
+            brojSudionika: null,
+            noSudionik: false,
+            existRadionica: false,
         };
     },
     created() {
@@ -380,6 +406,11 @@ export default {
                 .catch((error) => {
                     if (error.response && error.response.status === 422) {
                         this.errors = error.response.data.errors;
+                    } else if (
+                        error.response &&
+                        error.response.status === 400
+                    ) {
+                        this.existRadionica = true;
                     }
                 });
         },
@@ -471,9 +502,9 @@ export default {
                 .then((response) => {
                     this.prijave = response.data.clanovi;
                     this.brojSudionika = response.data.brojSudionika;
-                    if (this.brojSudionika == 0){
+                    if (this.brojSudionika == 0) {
                         this.noSudionik = true;
-                    }else{
+                    } else {
                         this.noSudionik = false;
                     }
                 })
@@ -486,6 +517,10 @@ export default {
                     this.loader = false;
                 });
         },
+
+        closeRadionicaExist(){
+            this.existRadionica = false;
+        }
     },
 };
 </script>

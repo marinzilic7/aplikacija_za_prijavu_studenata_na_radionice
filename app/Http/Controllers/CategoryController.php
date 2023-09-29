@@ -25,7 +25,7 @@ class CategoryController extends Controller
         $existCategory = Category::where('ime', $data['ime'])->first();
 
          if ($existCategory) {
-            return response()->json(['email' => 'Postoji kategorija pod tim imenom'], 400);
+            return response()->json(['category' => 'Postoji kategorija pod tim imenom'], 400);
         }
 
         $data['user_id'] = auth()->id();

@@ -27,10 +27,10 @@ class WorkshopController extends Controller
             ]
         );
 
-        $existWorkshop = Workshop::where('ime', $data['ime'])->first();
+        $existWorkshop = Workshop::where('ime', $data['ime'])->where('category_id', $data['category_id'])->first();
 
          if ($existWorkshop) {
-            return response()->json(['workshop' => 'Postoji radionica pod tim imenom'], 400);
+            return response()->json(['workshop' => 'Postoji radionica pod tim imenom za tu kategoriju!'], 400);
         }
 
         $data['user_id'] = auth()->id();
