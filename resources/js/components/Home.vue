@@ -39,15 +39,17 @@
                         type="button"
                         class="btn btn-outline-primary w-100"
                         data-bs-toggle="modal"
-                        :data-bs-target="'#exampleModal' + radionica.id"
+                        :data-bs-target="'#staticBackdrop' + radionica.id"
                     >
                         Prijavi se
                     </button>
                     <div
                         class="modal fade"
-                        :id="'exampleModal' + radionica.id"
+                        :id="'staticBackdrop' + radionica.id"
                         tabindex="-1"
-                        aria-labelledby="exampleModalLabel"
+                        data-bs-backdrop="static"
+                        data-bs-keyboard="false"
+                        aria-labelledby="staticBackdropLabel"
                         aria-hidden="true"
                     >
                         <div class="modal-dialog">
@@ -142,7 +144,10 @@
                     Objavljeno: {{ formattedDate(radionica.created_at) }}
                 </p>
                 <hr />
-                <button @click="deleteRadionicu(radionica.id)" class="btn w-100 btn-outline-danger">
+                <button
+                    @click="deleteRadionicu(radionica.id)"
+                    class="btn w-100 btn-outline-danger"
+                >
                     Izbrisi radionicu
                 </button>
             </div>
